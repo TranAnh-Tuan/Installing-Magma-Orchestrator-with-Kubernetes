@@ -390,6 +390,7 @@ Run the commands below:
 Run the commands below again and you can see these problems have been solved:
 
 > ` $ cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
+
 > ` $ helm install orc8r --namespace orc8r .  --values=${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/examples/minikube_values.yml`
 
 **The result should look like this:**
@@ -406,6 +407,7 @@ Now ensure the API and your certs are working:
 
 **In tab 2**
 > ` $ export CERTS_DIR=${MAGMA_ROOT}/.cache/test_certs  # mirrored from above`
+
 > `$ curl \
   --insecure \
   --cert ${CERTS_DIR}/admin_operator.pem \
