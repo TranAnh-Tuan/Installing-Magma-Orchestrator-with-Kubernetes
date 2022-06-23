@@ -41,7 +41,7 @@
 
 - If you see this error:
     
-    ![](D:/Magma/19.png)
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/19.png)
 - This error can be fixed by the following the command below:
     - > ` sudo chmod 666 /var/run/docker.sock
   
@@ -74,7 +74,7 @@
     bitnami/postgresql`
 
 - You should see the result like this:
-  ![](D:/Magma/1.png)
+  ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/1.png)
 
 - Next check the pods with command:
 
@@ -82,7 +82,7 @@
 
     - The result should look like this:
 
-        ![](D:/Magma/2.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/2.png)
 `
     
     - Describe the pod the error with command:
@@ -90,7 +90,7 @@
         > ` $ kubectl describe pod postgresql-0 -n orc8r `
     
     - The sceenshot will expose the error:
-        ![](D:/Magma/3.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/3.png)
     
     - The reason for this error because your Statefulset pod postgresqpl-0 does not have Persistent Volume Claim and Persistent Volume.
      
@@ -99,7 +99,7 @@
     
         > ` $ kubectl delete statefulset postgresql -n orc8r `
 
-        ![](D:/Magma/8.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/8.png)
 
     **You can fix this error following the steps below:**
 
@@ -111,7 +111,7 @@
 
     - Edit the file and add the following lines:
 
-        ![](D:/Magma/4.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/4.png)
 
     - Build Persistent Volume with the command below:
         > ` $ kubectl apply -f postgres-pv.yaml `
@@ -119,7 +119,7 @@
     - Check the Persistent Volume with the command below:
         > ` $ kubectl get pv `
 
-        ![](D:/Magma/5.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/5.png)
     
     ### Step 2: Create Persistent Volume Claim bound with the Persistent Volume
 
@@ -128,7 +128,7 @@
         > `$ vim postgres-pvc.yaml`
 
     - Edit the file and add the following lines:
-        ![](D:/Magma/6.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/6.png)
 
     - Build Persistent Volume Claim with the command below:
         > ` $ kubectl apply -f postgres-pvc.yaml `
@@ -136,7 +136,7 @@
     - Check the Persistent Volume Claim with the command below:
         > ` $ kubectl get pvc `
 
-        ![](D:/Magma/7.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/7.png)
     
     ### Step 3: Install Helm Chart (Postgresql-database)
 
@@ -145,13 +145,13 @@
     > `$ helm install --create-namespace --namespace orc8r postgresql --set auth.postgresPassword=postgres,auth.database=magma bitnami/postgresql --set persistence.existingClaim=postgresql-pvc --set primary.persistence.enabled=false`
 
     - The result should look like this:
-    ![](D:/Magma/10.png)
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/10.png)
 
     **Warning:**
     - If you want to delete pods created by helm, you cann't delete the pods by using command ` kubectl delete pod <pod name> -n <namespace>`. Instead you can list the name of `bitnami` charts and delete them by command `helm uninstall`
       - >`$ helm list -A `
     
-      - ![](D:/Magma/9.png)
+      - ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/9.png)
       
       - With the charts has namespace " default ":
          > ` $ helm uninstall <name> `
@@ -162,7 +162,7 @@
     ### Step 4: Check connection with database
     - We need to extract the password of the instance and save it as an environmental variable. That password will be used to create the connection.
     
-        ![](D:/Magma/11.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/11.png)
     
     - Run the following commands:
     - > ` $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace orc8r postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
@@ -174,12 +174,12 @@
     - You should see the result like this:
 
         - On the first terminal:
-            ![](D:/Magma/12.png)
+            ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/12.png)
         - On the second terminal:
-            ![](D:/Magma/13.png)
+            ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/13.png)
     
     - At this point, we have connected successfully with the database, we can verify our installation by checking the server version.
-            ![](D:/Magma/14.png) 
+            ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/14.png) 
     
 ## Installing Elastic Search with Helm
 
@@ -189,7 +189,7 @@
 
 - Edit the file and add the following lines:
 - 
-    ![](D:/Magma/15.png)
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/15.png)
 
 - Build the Persistent Volume with the following command:
 - 
@@ -199,7 +199,7 @@
 
 - Edit the file and add the following lines:
 - 
-  ![](D:/Magma/16.png)
+  ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/16.png)
 
 - Build the Persistent Volume Claim with the following command:
     >  ` $ kubectl apply -f elasticsearch-pvc.yaml `
@@ -218,7 +218,7 @@
 
     > ` $ kubectl get pods -A `
 
-    ![](D:/Magma/18.png)
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/18.png)
 
 ## Installing Orchestrator of Magma into K8S cluster
 First click into this link: https://github.com/magma/magma/tree/v1.6.1 (you can use whatever version you want)
@@ -250,7 +250,7 @@ First define some necessary variables:
     
 > `$ ./build.py --all`
 
-See this error? ![](D:/Magma/28.png)
+See this error? ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/28.png)
 
 - This means you lack of some file you need to install with:
 > `$ git clone --depth 1 https://github.com/magma/magma.git dp`
@@ -272,7 +272,7 @@ Generate the NMS certificate:
     
 > ` $ openssl req -nodes -new -x509 -batch -keyout nms_nginx.key -out nms_nginx.pem -subj "/CN=*.localhost" `
 
-![](D:/Magma/20.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/20.png)
 
 Move the certs to the charts directory:
 > `$  cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
@@ -301,7 +301,7 @@ Run the commands below:
     kubectl apply -f - `
 
 You may see the following error:
-![](D:/Magma/22.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/22.png)
 
 To fix the eror, add the following line:
 
@@ -324,7 +324,7 @@ To fix the eror, add the following line:
 > ` $ cp -r ../../../../.cache/test_certs/* charts/secrets/.secrets/certs/.`
  
 After finishing the copy process, the `~/magma/orc8r/cloud/helm/orc8r/charts/secrets/.secrets/certs` folder should look like this:
-![](D:/Magma/23.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/23.png)
 
 Run the command again:
 
@@ -348,7 +348,7 @@ Run the command again:
     --set=docker.password=$DOCKER_PASSWORD |
     kubectl apply -f - `
 
-![](D:/Magma/24.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/24.png)
 ### Create Values File
 
 > `$ cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
@@ -356,7 +356,7 @@ Run the command again:
 > `$ helm install orc8r --namespace orc8r .  --values=${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/examples/minikube.values.yaml`
 
 You may see this error:
-![](D:/Magma/27.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/27.png)
 
 Run this command to find the location of error file:
 > `$ cd ${MAGMA_ROOT}/orc8r/cloud/helm`
@@ -364,16 +364,16 @@ Run this command to find the location of error file:
 > `$ grep -rnw . -e "v1beta1"`
 
 The error file is:
-![](D:/Magma/26.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/26.png)
 
 Edit the file like this:
-![](D:/Magma/25.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/25.png)
 
 Edit the file   **minikube_values.yml** in directory `${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/examples` like this:
 
-![](D:/Magma/29.png)
-![](D:/Magma/30.png)
-![](D:/Magma/31.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/29.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/30.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/31.png)
 
 Run the commands below:
 
@@ -384,7 +384,7 @@ Run the commands below:
 - After finish its installation, you may see this errors:
     #### The first bug:
 
-    ![](D://Magma/32.png)
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/32.png)
 
     - Try to figure out the problems by using these command below:
 
@@ -392,19 +392,19 @@ Run the commands below:
     
         > ` $  kubectl logs orc8r-nginx-766b7d7fc4-nsrqx -n orc8r `
 
-        ![](D://Magma/33.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/33.png)
     - Ok, we figure out the error, now find the file that contains **kube-dns.kube-system.svc.cluster.local**
         > `$ sudo vim ~/magma/orc8r/cloud/helm/orc8r/values.yaml`
     
     - Change the following line:
 
-        ![](D://Magma/34.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/34.png)
         
         > `  $ kubectl get svc `
 
-        ![](D://Magma/37.png)
-        ![](D://Magma/35.png)
-        ![](D://Magma/36.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/37.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/35.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/36.png)
     
     #### The second bug (This problem only happens if you use one database for both NMS and cluster like my case, i only use Postgresql for boths):
 
@@ -414,10 +414,10 @@ Run the commands below:
     
         > ` $ kubectl logs nms-magmalte-667f8d8d8b-w56dc -n orc8r`
 
-        ![](D://Magma/38.png)
+        ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/38.png)
     
     - Ok so the problems lie on file `~/magma/orc8r/cloud/helm/orc8r/chart/nms/values.yaml`:
-      ![](D://Magma/39.png) 
+      ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/39.png) 
   
 
 Run the commands below again and you can see these problems have been solved:
@@ -427,7 +427,7 @@ Run the commands below again and you can see these problems have been solved:
 > ` $ helm install orc8r --namespace orc8r .  --values=${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/examples/minikube_values.yml`
 
 **The result should look like this:**
-![](D://Magma/40.png)
+![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/40.png)
 
 ### Access Orc8r
 Create an Orc8r admin user
