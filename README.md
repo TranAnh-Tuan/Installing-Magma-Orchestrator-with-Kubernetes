@@ -128,6 +128,7 @@
         > `$ vim postgres-pvc.yaml`
 
     - Edit the file and add the following lines:
+    
         ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/6.png)
 
     - Build Persistent Volume Claim with the command below:
