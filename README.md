@@ -150,6 +150,7 @@
     **Warning:**
     - If you want to delete pods created by helm, you cann't delete the pods by using command ` kubectl delete pod <pod name> -n <namespace>`. Instead you can list the name of `bitnami` charts and delete them by command `helm uninstall`
       - >`$ helm list -A `
+    
       - ![](D:/Magma/9.png)
       
       - With the charts has namespace " default ":
@@ -450,3 +451,11 @@ Now ensure the API and your certs are working:
 > ` $ kubectl --namespace orc8r port-forward svc/nginx-proxy 8081:443`
 
 Log in to NMS at https://magma-test.localhost:8081 using credentials: `admin@magma.test/password1234`
+
+    ## Author
+    ---
+    #### Name: Ngọc Ánh Phạm
+    #### Email: phamngocanh2711@gmail.com
+    ---
+    #### Name: Trần Anh Tuấn
+    #### Email: tuan-hs11115@ngoisao.edu.vn
