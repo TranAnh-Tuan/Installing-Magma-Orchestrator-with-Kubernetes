@@ -47,7 +47,9 @@
   
 **If you docker registry is private and self hosted you should do the following :**
 > `docker login <REGISTRY_HOST>:<REGISTRY_PORT>`
+
 > `docker tag <IMAGE_ID> <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION>`
+    
 > `docker push <REGISTRY_HOST>:<REGISTRY_PORT>/<APPNAME>:<APPVERSION> `
 
 **Example :**
@@ -59,6 +61,7 @@
 -  `MAGMA_ROOT` environment variable is set to the local directory where you cloned the Magma repository:
    
    > ` $ mkdir ~/magma `
+    
    > ` $ export MAGMA_ROOT=~/magma `
 
 ## Install **Postgresql** with Helm
@@ -93,6 +96,7 @@
      
     - Delete the pod first before trying to fix this error:
         > ` $ kubectl get statefulset -A `
+    
         > ` $ kubectl delete statefulset postgresql -n orc8r `
 
         ![](D:/Magma/8.png)
@@ -161,6 +165,7 @@
     
     - Run the following commands:
     - > ` $ export POSTGRES_PASSWORD=$(kubectl get secret --namespace orc8r postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
+    
     - > ` $ kubectl run postgresql-client --rm --tty -i --restart='Never' --namespace orc8r --image docker.io/bitnami/postgresql:14.4.0-debian-11-r0 --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U postgres -d magma -p 5432 `
 
     - Open the second terminal and type this line:
@@ -219,10 +224,13 @@ First click into this link: https://github.com/magma/magma/tree/v1.6.1 (you can 
 
 To install components of Orchestrator, you should generate the MAGMA environment:
 - > ` mkid magma`
+    
 - > ` export MAGMA_ROOT=~/magma` 
 ### Build and publish container images
+    
 > `$ docker login`
 >Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+    
 >Username: REGISTRY_USERNAME
 >Password:
 >Login Succeeded
@@ -230,17 +238,24 @@ We provide scripts to build and publish images. The publish script is provided a
 
 First define some necessary variables:
 > `$ export PUBLISH=${MAGMA_ROOT}/orc8r/tools/docker/publish.sh  # or add to path`
+    
 > `$ export REGISTRY=registry.hub.docker.com/REGISTRY  # or desired registry`
+    
 >  `$ export MAGMA_TAG=1.6.0-master  # or desired tag`
+    
 ### Build and publish Orchestrator images (you can skip this step if you want to use the official container images at artifactory.magmacore.org )
+    
 > `$ cd ${MAGMA_ROOT}/orc8r/cloud/docker`
+    
 > `$ ./build.py --all`
 
 See this error? ![](D:/Magma/28.png)
 
 - This means you lack of some file you need to install with:
 > `$ git clone --depth 1 https://github.com/magma/magma.git dp`
+    
 > `$ cd dp`
+    
 > `$    git filter-branch --prune-empty --subdirectory-filter dp HEAD `
 
 ### Generate secrets:
@@ -249,15 +264,20 @@ First you'll need to create a few certs and the kubernetes secrets that orchestr
 
 Generate the NMS certificate:
 > `$ mkdir ~/magma/.cache`
+    
 > `$ mkdir  ~/magma/.cache/test_certs`
+    
 > `  $ cd ${MAGMA_ROOT}/.cache/test_certs`
+    
 > ` $ openssl req -nodes -new -x509 -batch -keyout nms_nginx.key -out nms_nginx.pem -subj "/CN=*.localhost" `
-> 
+
 ![](D:/Magma/20.png)
 
 Move the certs to the charts directory:
 > `$  cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
+    
 > `$ mkdir -p charts/secrets/.secrets/certs`
+    
 > ` $ cp -r ../../../../.cache/test_certs/* charts/secrets/.secrets/certs/.`
 
 Run the commands below:
@@ -285,23 +305,30 @@ You may see the following error:
 To fix the eror, add the following line:
 
 > `$ cp ~/magma/orc8r/cloud/deploy/scripts/create_application_certs.sh ${MAGMA_ROOT}/.cache/test_certs`
+    
 > ` $ cd ${MAGMA_ROOT}/.cache/test_certs `
+    
 > ` $ ./create_application_certs.sh "/CN=*.localhost" `
 
 >   `  $ cp ~/magma/orc8r/cloud/deploy/scripts/self_sign_certs.sh ${MAGMA_ROOT}/.cache/test_certs`
 
 >` $ sudo su`
+    
 > ` # ./self_sign_certs.sh "/CN=*.localhost"`
+    
 > `$ sudo chown user -R ~/magma/.cache/test_certs`
+    
 > ` $ cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
+    
 > ` $ cp -r ../../../../.cache/test_certs/* charts/secrets/.secrets/certs/.`
-> 
+ 
 After finishing the copy process, the `~/magma/orc8r/cloud/helm/orc8r/charts/secrets/.secrets/certs` folder should look like this:
 ![](D:/Magma/23.png)
 
 Run the command again:
 
 > ` $ cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
+    
 > ` $ helm template orc8r ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/charts/secrets \
     --namespace orc8r \
     --set-string secret.certs.enabled=true \
@@ -324,6 +351,7 @@ Run the command again:
 ### Create Values File
 
 > `$ cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
+    
 > `$ helm install orc8r --namespace orc8r .  --values=${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/examples/minikube.values.yaml`
 
 You may see this error:
@@ -331,6 +359,7 @@ You may see this error:
 
 Run this command to find the location of error file:
 > `$ cd ${MAGMA_ROOT}/orc8r/cloud/helm`
+    
 > `$ grep -rnw . -e "v1beta1"`
 
 The error file is:
@@ -348,6 +377,7 @@ Edit the file   **minikube_values.yml** in directory `${MAGMA_ROOT}/orc8r/cloud/
 Run the commands below:
 
 > ` $ cd ${MAGMA_ROOT}/orc8r/cloud/helm/orc8r`
+    
 > ` $ helm install orc8r --namespace orc8r .  --values=${MAGMA_ROOT}/orc8r/cloud/helm/orc8r/examples/minikube_values.yml`
 
 - After finish its installation, you may see this errors:
@@ -358,6 +388,7 @@ Run the commands below:
     - Try to figure out the problems by using these command below:
 
         > ` $ kubectl describe pods orc8r-nginx-766b7d7fc4-nsrqx -n orc8r`
+    
         > ` $  kubectl logs orc8r-nginx-766b7d7fc4-nsrqx -n orc8r `
 
         ![](D://Magma/33.png)
@@ -379,6 +410,7 @@ Run the commands below:
     - Try to figure out the problems by using these command below:
 
         > ` $ kubectl describe pods nms-magmalte-667f8d8d8b-w56dc -n orc8r`
+    
         > ` $ kubectl logs nms-magmalte-667f8d8d8b-w56dc -n orc8r`
 
         ![](D://Magma/38.png)
