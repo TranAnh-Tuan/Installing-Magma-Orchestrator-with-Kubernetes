@@ -6,7 +6,7 @@
 
 - You can install Helm with the following command:
 
-    > ` $ sudo su `
+    >  $ sudo su 
 
     > ` # curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null `
 
