@@ -483,7 +483,7 @@ look like this:
     https://magma-test.magma.test:8081
 - Log in with:  `admin@magma.test/password1234`
 - The result should look like this:
-    ![]([D://Magma/](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/43.png)
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/43.png)
 
 
     ## Author
