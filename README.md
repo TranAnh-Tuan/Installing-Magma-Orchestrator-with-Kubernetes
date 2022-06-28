@@ -452,6 +452,39 @@ Now ensure the API and your certs are working:
 > ` $ kubectl --namespace orc8r port-forward svc/nginx-proxy 8081:443`
 
 Log in to NMS at https://magma-test.localhost:8081 using credentials: `admin@magma.test/password1234`
+    
+## Warning Access NMS
+
+If you're just like me, perform Magma NMS Web GUI in another computer ( in my case it is Laptop Window 10 **IP_address: 10.10.y.y**) and the Master node which had been successful to deploy Orchestrator **IP_address=192.168.x.x** , You should follow this step instead:
+
+1. Open the notepad with administration ( Window).
+2. Edit to folder C:\Windows\drivers\etc\hosts
+look like this:
+    ![](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/41.png)
+3. Add the following commands in Orchestrator:
+
+    > `$ kubectl exec -it --namespace orc8r deploy/orc8r-orchestrator --   /var/opt/magma/bin/accessc   add-existing -admin -cert /var/opt/magma/certs/admin_operator.pem   admin_operator`
+
+    > `$ kubectl --namespace orc8r exec -it deploy/nms-magmalte -- yarn migrate`
+
+    > ` $ kubectl --namespace orc8r exec -it deploy/nms-magmalte -- yarn setAdminPassword magma-test admin@magma.test password1234`
+
+    > ` $ kubectl --namespace orc8r exec -it deploy/nms-magmalte -- yarn setAdminPassword master admin@magma.test password1234`
+
+- Open two tab in Orc8r terminal:
+    - Tab 1:
+
+        > `$ kubectl --namespace orc8r port-forward svc/orc8r-nginx-proxy 7                                                                              443:8443 7444:8444 9443:443`
+    
+    - Tab 2: 
+        > `$ kubectl --namespace orc8r --address 0.0.0.0 port-forward svc/nginx-proxy 8081:443`
+- Open Web browser in your computer - laptop:
+
+    https://magma-test.magma.test:8081
+- Log in with:  `admin@magma.test/password1234`
+- The result should look like this:
+    ![]([D://Magma/](https://github.com/TranAnh-Tuan/Installing-Magma-Orchestrator-with-Kubernetes/blob/main/Images/43.png)
+
 
     ## Author
     ---
@@ -460,3 +493,4 @@ Log in to NMS at https://magma-test.localhost:8081 using credentials: `admin@mag
     ---
     #### Name: Trần Anh Tuấn
     #### Email: tuan-hs11115@ngoisao.edu.vn
+  
