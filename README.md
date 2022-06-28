@@ -488,7 +488,7 @@ look like this:
 
     ## Author
     ---
-    #### Name: Ngọc Ánh Phạm
+    #### Name: Phạm Ngọc Ánh
     #### Email: phamngocanh2711@gmail.com
     ---
     #### Name: Trần Anh Tuấn
